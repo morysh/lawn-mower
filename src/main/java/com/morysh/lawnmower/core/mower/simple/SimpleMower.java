@@ -1,8 +1,8 @@
-package com.morysh.lawnmower.core.simple;
+package com.morysh.lawnmower.core.mower.simple;
 
-import com.morysh.lawnmower.core.Instruction;
-import com.morysh.lawnmower.core.InvalidCoordinateException;
-import com.morysh.lawnmower.core.Mower;
+import com.morysh.lawnmower.core.mower.Instruction;
+import com.morysh.lawnmower.core.mower.InvalidCoordinateException;
+import com.morysh.lawnmower.core.mower.Mower;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -10,14 +10,14 @@ import java.util.Deque;
 
 public class SimpleMower implements Mower {
     private static final Logger LOG = LoggerFactory.getLogger(SimpleMower.class);
-
-    private RectangularLawn lawn;
-    private CartesianCoordinatesPosition position;
-    private SimpleOrientation orientation;
     private Deque<? extends Instruction> instructions;
+    private RectangularLawn lawn;
+    private SimpleCardinalOrientation orientation;
+    private SimpleCartesianCoordinatesPosition position;
 
     // Constructor uses type SimpleInstruction and not interface Instruction because it's only know to be compatible with this implementation as of now.
-    public SimpleMower(RectangularLawn lawn, int x, int y, SimpleOrientation orientation, Deque<SimpleInstruction> instructions) throws InvalidCoordinateException {
+    public SimpleMower(RectangularLawn lawn, int x, int y, SimpleCardinalOrientation orientation, Deque<SimpleInstruction> instructions)
+            throws InvalidCoordinateException {
         this.lawn = lawn;
         position = lawn.getPosition(x, y);
         if (position == null) {
@@ -28,14 +28,6 @@ public class SimpleMower implements Mower {
         }
         this.orientation = orientation;
         this.instructions = instructions;
-    }
-
-    @Override
-    public void run() {
-        while (!instructions.isEmpty()) {
-            Instruction instruction = instructions.pop();
-            instruction.execute(this);
-        }
     }
 
     /**
@@ -62,10 +54,10 @@ public class SimpleMower implements Mower {
                 break;
             default:
                 // Should never happen
-                LOG.error("Invalide orientation while moving forward");
+                LOG.error("Invalid orientation while moving forward");
                 return;
         }
-        CartesianCoordinatesPosition nextCoordinate = lawn.getPosition(nextX, nextY);
+        SimpleCartesianCoordinatesPosition nextCoordinate = lawn.getPosition(nextX, nextY);
         if (nextCoordinate == null) {
             LOG.debug("Trying to go outside of bounds : going {} from [{}, {}]. Ignoring instruction", orientation, position.getX(), position.getY());
             return;
@@ -95,11 +87,23 @@ public class SimpleMower implements Mower {
         orientation = orientation.getNextRight();
     }
 
-    public CartesianCoordinatesPosition getPosition() {
+    public SimpleCartesianCoordinatesPosition getPosition() {
         return position;
     }
 
-    public SimpleOrientation getOrientation() {
+    public SimpleCardinalOrientation getOrientation() {
         return orientation;
+    }
+
+    @Override
+    public void run() {
+        while (!instructions.isEmpty()) {
+            Instruction instruction = instructions.pop();
+            instruction.execute(this);
+        }
+    }
+
+    public Deque<? extends Instruction> getInstructions() {
+        return instructions;
     }
 }

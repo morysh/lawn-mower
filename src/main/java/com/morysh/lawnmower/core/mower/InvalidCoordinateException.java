@@ -1,4 +1,4 @@
-package com.morysh.lawnmower.core;
+package com.morysh.lawnmower.core.mower;
 
 public class InvalidCoordinateException extends Exception {
     public InvalidCoordinateException() {

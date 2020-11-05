@@ -1,23 +1,23 @@
-package com.morysh.lawnmower.core.simple;
+package com.morysh.lawnmower.core.mower.simple;
 
-import com.morysh.lawnmower.core.InvalidCoordinateException;
+import com.morysh.lawnmower.core.mower.InvalidCoordinateException;
 
 public class RectangularLawn {
-    CartesianCoordinatesPosition[][] grid;
+    SimpleCartesianCoordinatesPosition[][] grid;
 
     public RectangularLawn(int width, int height) throws InvalidCoordinateException {
         if (width <= 0 || height <= 0) {
             throw new InvalidCoordinateException("Lawn must have a positive width and length");
         }
-        grid = new CartesianCoordinatesPosition[width][height];
+        grid = new SimpleCartesianCoordinatesPosition[width][height];
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
-                grid[x][y] = new CartesianCoordinatesPosition(x, y);
+                grid[x][y] = new SimpleCartesianCoordinatesPosition(x, y);
             }
         }
     }
 
-    public CartesianCoordinatesPosition getPosition(int x, int y) {
+    public SimpleCartesianCoordinatesPosition getPosition(int x, int y) {
         try {
             return grid[x][y];
         } catch (ArrayIndexOutOfBoundsException e) {
@@ -25,11 +25,11 @@ public class RectangularLawn {
         }
     }
 
-    public int getWidth() {
-        return grid.length;
-    }
-
     public int getHeight() {
         return grid[0].length;
+    }
+
+    public int getWidth() {
+        return grid.length;
     }
 }

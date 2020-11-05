@@ -1,23 +1,11 @@
-package com.morysh.lawnmower.core.simple;
+package com.morysh.lawnmower.core.mower.simple;
 
-public enum SimpleOrientation {
-    N("North"),
-    E("East"),
-    S("South"),
-    W("West");
+import com.morysh.lawnmower.core.mower.Orientation;
 
-    private String value;
+public enum SimpleCardinalOrientation implements Orientation {
+    N, E, S, W;
 
-    SimpleOrientation(String value) {
-        this.value = value;
-    }
-
-    @Override
-    public String toString() {
-        return value;
-    }
-
-    public SimpleOrientation getNextLeft() {
+    public SimpleCardinalOrientation getNextLeft() {
         switch (this) {
             case N:
                 return W;
@@ -33,7 +21,7 @@ public enum SimpleOrientation {
         }
     }
 
-    public SimpleOrientation getNextRight() {
+    public SimpleCardinalOrientation getNextRight() {
         switch (this) {
             case N:
                 return E;

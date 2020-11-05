@@ -1,38 +1,39 @@
 package com.morysh.lawnmower;
 
-import junit.framework.Test;
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-/**
- * Unit test for simple App.
- */
-public class AppTest 
-    extends TestCase
-{
-    /**
-     * Create the test case
-     *
-     * @param testName name of the test case
-     */
-    public AppTest( String testName )
-    {
-        super( testName );
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
+import java.util.Objects;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+class AppTest {
+    private final PrintStream originalOut = System.out;
+    private ByteArrayOutputStream out;
+
+    @Test
+    public void mainTest() {
+        // GIVEN
+        String[] args = new String[]{Objects.requireNonNull(getClass().getClassLoader().getResource("simple-test.txt")).getPath()};
+
+        // WHEN
+        App.main(args);
+
+        // THEN
+        assertEquals("1 3 N\n5 1 E\n", out.toString());
     }
 
-    /**
-     * @return the suite of tests being tested
-     */
-    public static Test suite()
-    {
-        return new TestSuite( AppTest.class );
+    @BeforeEach
+    public void replaceSystemOutput() {
+        out = new ByteArrayOutputStream();
+        System.setOut(new PrintStream(out));
     }
 
-    /**
-     * Rigourous Test :-)
-     */
-    public void testApp()
-    {
-        assertTrue( true );
+    @AfterEach
+    public void restoreSystemOutput() {
+        System.setOut(originalOut);
     }
 }
